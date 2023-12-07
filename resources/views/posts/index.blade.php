@@ -7,18 +7,16 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     </head>
     <body>
-        <h1>みててね</h1>
+        <h1>Blog Name</h1>
         <div class='posts'>
-            @if(isset($posts) && count($posts) > 0)
-                @foreach ($posts as $post)
-                    <div class='post'>
-                        <h2 class='title'>{{ $post->title }}</h2>
-                        <p class='body'>{{ $post->body }}</p>
-                    </div>
-                @endforeach
-            @else
-                <p>No posts found.</p>
-            @endif
+            @foreach ($posts as $post)
+                <div class='post'>
+                    <h2 class='title'>
+                        <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
+                    </h2>
+                    <p class='body'>{{ $post->body }}</p>
+                </div>
+            @endforeach
         </div>
         <div class='paginate'>
             {{ $posts->links() }}
