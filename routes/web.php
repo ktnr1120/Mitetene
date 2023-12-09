@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\WeathersController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,8 @@ use App\Http\Controllers\PostController;
 |
 */
 Route::get('/', [PostController::class, 'index']);
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::resource('weathers', WeathersController::class);
 
 Route::get('/posts/create', [PostController::class, 'create']);
 Route::get('/posts/{post}', [PostController::class, 'show']);　　
