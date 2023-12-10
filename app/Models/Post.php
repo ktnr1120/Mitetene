@@ -23,9 +23,9 @@ class Post extends Model
         return $this->orderBy('updated_at', 'DESC')->paginate($limit_count);
     }
     
-    public function weathers()
+    public function weather()
     {
-        return $this->belongsToMany(Weathers::class, 'post_weather');
+        return $this->belongsToMany(Weather::class, 'post_weather');
     }
 }
 

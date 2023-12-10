@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\Weathers;
+use App\Models\Weather;
 use App\Models\Category;
 use App\Http\Requests\PostRequest;
 
@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function index(Post $post)
     {
-        $weathers = Weathers::all();
+        $weathers = Weather::all();
         $posts = $post->getPaginateByLimit();
         $categories = Category::all();
 
