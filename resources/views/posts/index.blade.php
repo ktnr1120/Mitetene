@@ -37,9 +37,11 @@
                 <p class='body'>{{ $post->body }}</p>
                 <h3>カテゴリ:</h3>
                 <ul>
-                    @foreach ($post->categories as $category)
-                        <li>{{ $category->name }}</li>
-                    @endforeach
+                    @if ($post->categories)
+                        @foreach ($post->categories as $category)
+                            <li>{{ $category->name }}</li>
+                        @endforeach
+                    @endif
                 </ul>
                 <h3>天気:</h3>
                 <ul>
