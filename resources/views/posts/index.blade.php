@@ -62,7 +62,7 @@
         {{ $posts->links() }}
     </div>
 
-    <script>
+    <script src="{{ mix('js/app.js',) }}" defer>
         function deletePost(id) {
             'use strict'
             

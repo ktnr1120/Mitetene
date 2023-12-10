@@ -38,6 +38,6 @@ class CreateWeathersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('post_weather');
-        Schema::dropIfExists('weathers');
+        Schema::dropIfExists('weather');
     }
 }
