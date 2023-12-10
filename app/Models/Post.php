@@ -25,7 +25,7 @@ class Post extends Model
     
     public function weathers()
     {
-        return $this->belongsToMany(Weather::class, 'post_weather');
+        return $this->belongsToMany(Weathers::class, 'post_weather');
     }
 }
 
