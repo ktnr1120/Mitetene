@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Weather extends Model
 {
     use HasFactory;
+    
+    protected $table = 'weathers';
 
     protected $fillable = ['name'];
 
