@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
             ChildrenSeeder::class,
             PostSeeder::class,
             CategorySeeder::class,
-            WeatherSeeder::class,
         ]);
     }
 }

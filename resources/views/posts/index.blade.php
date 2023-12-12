@@ -19,15 +19,6 @@
         </ul>
     </div>
 
-    <div class='weathers'>
-        <h2>天気一覧</h2>
-        <ul>
-            @foreach ($weathers as $weather)
-                <li>{{ $weather->name }}</li>
-            @endforeach
-        </ul>
-    </div>
-
     <div class='posts'>
         @foreach ($posts as $post)
             <div class='post'>
@@ -43,12 +34,6 @@
                         @endforeach
                     @endif
                 </ul>
-                <h3>天気:</h3>
-                <ul>
-                    @foreach ($post->weathers as $weather)
-                        <li>{{ $weather->name }}</li>
-                    @endforeach
-                </ul>
                 <form action="/posts/{{ $post->id }}" id="form_{{$post->id}}" method="post">
                     @csrf
                     @method('DELETE')
@@ -62,7 +47,7 @@
         {{ $posts->links() }}
     </div>
 
-    <script src="{{ mix('js/app.js',) }}" defer>
+    <script>
         function deletePost(id) {
             'use strict'
             
