@@ -19,16 +19,6 @@
             <p class="body__error" style="color:red">{{ $errors->first('post.body') }}</p>
         </div>
 
-        <!-- 天気情報のセレクトボックス -->
-        <div class="weather">
-            <h2>Weather</h2>
-            <select name="post[weather_id]">
-                @foreach ($weathers as $weather)
-                    <option value="{{ $weather->id }}">{{ $weather->name }}</option>
-                @endforeach
-            </select>
-        </div>
-
         <input type="submit" value="保存"/>
     </form>
     <div class="back">[<a href="/">back</a>]</div>

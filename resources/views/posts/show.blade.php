@@ -12,9 +12,9 @@
             {{ $post->title }}
         </h1>
         <div class="content">
-            <div class="content__post">
+            <div class="content_post">
                 <h3>本文</h3>
-                <p>{{ $post->body }}</p>    
+                <p class='body'>{{ $post->body }}</p>    
             </div>
         </div>
         <div class="edit">

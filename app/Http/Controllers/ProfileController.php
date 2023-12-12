@@ -20,7 +20,8 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
-
+    
+    
     /**
      * Update the user's profile information.
      */
