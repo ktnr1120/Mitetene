@@ -28,7 +28,7 @@
                         <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
                     </h2>
                     <p class='body'>{{ $post->body }}</p>
-                    <h3>カテゴリ:</h3>
+                    <h3>カテゴリ:</h3><!-- 12/13現在未実装-->
                     <ul>
                         @if ($post->categories)
                             @foreach ($post->categories as $category)
