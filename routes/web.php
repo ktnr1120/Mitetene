@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 /*
@@ -14,15 +15,20 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', [PostController::class, 'index'])->name('index');
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/posts/create', [PostController::class,'create']);
-Route::get('/posts/{post}', [PostController::class,'show']);
-Route::post('/posts', [PostController::class, 'store']);
+Route::get('/', [PostController::class, 'index'])->name('index')->middleware('auth');
+    Route::get('/', [PostController::class, 'index'])->name('index');
+    Route::post('/posts', [PostController::class, 'store'])->name('store');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('create');
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('show');
+    Route::put('/posts/{post}', [PostContlloer::class, 'update'])->name('update');
+    Route::delete('/posts/{post}', [PostController::clas, 'delete'])->name('delete');
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('edit');
+
+Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
