@@ -15,7 +15,18 @@ class Post extends Model
     protected $fillable =[
         'title',
         'body',
+        'user_id',
+        'Children_ID',
+        'Date'
     ];
+    
+    //Userに対するリレーション
+    
+    //[1対多]の関係なので単数形に
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
         
     public function getPaginateByLimit(int $limit_count = 5)
     {

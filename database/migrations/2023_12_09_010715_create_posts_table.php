@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('User_ID');
+            $table->foreign('User_ID')->references('id')->on('users'); // users テーブルの id カラムを参照
             $table->unsignedBigInteger('Children_ID');
             $table->date('Date');
             $table->string('title', 50);
