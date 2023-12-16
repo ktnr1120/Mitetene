@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/', [PostController::class, 'index'])->name('index');
     Route::get('/posts/create', [PostController::class, 'create'])->name('create');
+    Route::resource('weathers', WeatherController::class);
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('show');
     Route::post('/posts', [PostController::class, 'store'])->name('store');
     Route::put('/posts/{post}', [PostController::class, 'update'])->name('update');
