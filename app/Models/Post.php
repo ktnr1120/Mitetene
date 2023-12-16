@@ -17,7 +17,8 @@ class Post extends Model
         'body',
         'user_id',
         'Children_ID',
-        'Date'
+        'Date',
+        'weather_id'
     ];
     
     //Userに対するリレーション
@@ -26,6 +27,11 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    
+    public function weather()
+    {
+        return $this->belongsTo(Weather::class);
     }
         
     public function getPaginateByLimit(int $limit_count = 5)
