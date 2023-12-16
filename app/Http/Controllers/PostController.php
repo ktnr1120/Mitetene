@@ -68,9 +68,13 @@ class PostController extends Controller
     {
         $input_post = $request['post'];
         $input_post += ['user_id' => $request->user()->id];
+        
+        // ログインしているユーザーのChildren_IDを投稿データに設定
+        $input_post['Children_ID'] = $request->user()->children_id;
+        
         $post->fill($input_post)->save();
         
-        return redirect('/posts/', $post->id);
+        return redirect('/posts/' . $post->id);
     }
     
     public function delete(Post $post)
