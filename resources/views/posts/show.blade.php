@@ -9,6 +9,11 @@
     </head>
     <x-app-layout>
         <body>
+            @if ($post->weather)
+                <h2>天気: {{ $post->weather->name }}</h2>
+            @else
+                <p>天気情報がありません。</p>
+            @endif
             <h1 class="title">
                 {{ $post->title }}
             </h1>
@@ -18,6 +23,16 @@
                     <p class='body'>{{ $post->body }}</p>    
                 </div>
             </div>
+            @if ($post->categories)
+                <h2>カテゴリ:</h2>
+                <ul>
+                    @foreach ($post->categories as $category)
+                        <li>{{ $category->name }}</li>
+                    @endforeach
+                </ul>
+            @else
+                <p>カテゴリ情報がありません。</p>
+            @endif
             <div class="edit">
                 <a href="/posts/{{ $post->id }}/edit">edit</a>
             </div>

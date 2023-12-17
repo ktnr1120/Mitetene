@@ -33,7 +33,7 @@ class PostController extends Controller
     
     public function store(PostRequest $request, Post $post)
     {
-            // 認証されているユーザーの情報を取得
+        // 認証されているユーザーの情報を取得
         $user = Auth::user();
     
         // デバッグ用：ログにユーザー情報を出力
@@ -41,13 +41,13 @@ class PostController extends Controller
     
         // リクエストから投稿データを取得
         $input = $request['post'];
-        
+    
         $input += ['user_id' => $request->user()->id];
     
         // ログインしているユーザーのuser_idを投稿データに設定
         $input['User_ID'] = $user->id;
-         
-         // Date カラムを現在の日付に設定
+    
+        // Date カラムを現在の日付に設定
         $input['Date'] = now();
     
         // デバッグ用：ログに投稿データを出力
@@ -55,12 +55,17 @@ class PostController extends Controller
     
         // 投稿データを保存
         $post->fill($input)->save();
+        
+        // 選択されたカテゴリを中間テーブルに紐付ける
+        $post->categories()->sync($request->input('categories', []));
+        
         return redirect('/posts/' . $post->id);
     }
     
     public function edit(Post $post)
     {
-        return view('posts.edit')->with(['post'=> $post]);
+        $categories = Category::all();
+        return view('posts.edit', compact('post', 'categories'));
     }
     
     public function update(PostRequest $request, Post $post)
@@ -69,6 +74,9 @@ class PostController extends Controller
         $input_post += ['user_id' => $request->user()->id];
         
         $post->fill($input_post)->save();
+        
+        // カテゴリの同期処理
+        $post->categories()->sync($request->input('categories', []));
         
         return redirect('/posts/' . $post->id);
     }

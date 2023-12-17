@@ -18,7 +18,8 @@ class Post extends Model
         'user_id',
         'Children_ID',
         'Date',
-        'weather_id'
+        'weather_id',
+        'IsDelete'
     ];
     
     //Userに対するリレーション
@@ -26,12 +27,17 @@ class Post extends Model
     //[1対多]の関係なので単数形に
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     
     public function weather()
     {
         return $this->belongsTo(Weather::class);
+    }
+    
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
     }
         
     public function getPaginateByLimit(int $limit_count = 5)
