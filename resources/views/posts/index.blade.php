@@ -25,6 +25,7 @@
             @foreach ($posts as $post)
                 <div class='post'>
                     <h2 class='title'>
+                        <p>{{ $post->created_at->format('Y,m,d') }}</p>
                         <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
                     </h2>
                     <p class='body'>{{ $post->body }}</p>

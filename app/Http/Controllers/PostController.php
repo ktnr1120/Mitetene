@@ -42,13 +42,24 @@ class PostController extends Controller
         // リクエストから投稿データを取得
         $input = $request['post'];
     
-        $input += ['user_id' => $request->user()->id];
+        $input += [
+            'user_id' => $request->user()->id,
+            'Date' => now(),
+            'weather_id' => $request->input('weather_id'),
+            ];
     
         // ログインしているユーザーのuser_idを投稿データに設定
         $input['User_ID'] = $user->id;
     
         // Date カラムを現在の日付に設定
         $input['Date'] = now();
+        
+        // 天気情報を取得
+        $weatherId = $request->input('weather_id');
+        $weather = Weather::find($weatherId);
+        
+        // 天気情報を投稿データに組み込む
+        $input['weather_id'] = $weather->id;
     
         // デバッグ用：ログに投稿データを出力
         \Log::info('Post data:', ['input' => $input]);
