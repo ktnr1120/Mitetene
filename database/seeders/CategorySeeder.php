@@ -2,23 +2,29 @@
 
 namespace Database\Seeders;
 
+// database/seeders/CategorySeeder.php
+
 use Illuminate\Database\Seeder;
-use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        // テスト用のカテゴリレコードを挿入
-        Category::create(['name' => '成長']);
-        Category::create(['name' => '発見']);
-        Category::create(['name' => '特技']);
-        Category::create(['name' => '行事']);
-        Category::create(['name' => '健康']);
+        $categories = [
+            '成長',
+            '発見',
+            '特技',
+            '行事',
+            '健康'
+        ];
+
+        foreach ($categories as $category) {
+            DB::table('categories')->insert([
+                'name' => $category,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

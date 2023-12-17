@@ -17,6 +17,13 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group">
+                <label for="categories">カテゴリー</label>
+                @foreach ($categories as $category)
+                    <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}>
+                    <label>{{ $category->name }}</label>
+                @endforeach
+            </div>
             <div class="title">
                 <h2>タイトル</h2>
                 <input type="text" name="post[title]" placeholder="タイトル" value="{{ old('post.title') }}"/>
