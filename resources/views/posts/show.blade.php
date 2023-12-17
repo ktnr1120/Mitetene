@@ -9,12 +9,13 @@
     </head>
     <x-app-layout>
         <body>
-            @if ($post->weather)
-                <h2>天気: {{ $post->weather->name }}</h2>
-            @else
-                <p>天気情報がありません。</p>
-            @endif
             <h1 class="title">
+                <p>{{ $post->created_at->format('Y,m,d') }}</p>
+                @if ($post->weather)
+                <h2>天気: {{ $post->weather->name }}</h2>
+                @else
+                    <p>天気情報がありません。</p>
+                @endif
                 {{ $post->title }}
             </h1>
             <div class="content">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Weather;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class WeatherController extends Controller
