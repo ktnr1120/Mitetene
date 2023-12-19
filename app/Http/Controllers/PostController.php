@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Weather;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 
 class PostController extends Controller
 {
@@ -60,6 +62,12 @@ class PostController extends Controller
         
         // 天気情報を投稿データに組み込む
         $input['weather_id'] = $weather->id;
+        
+        // 画像アップロード処理
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('posts', 's3');
+            $input['image_path'] = $imagePath;
+        }
     
         // デバッグ用：ログに投稿データを出力
         \Log::info('Post data:', ['input' => $input]);
