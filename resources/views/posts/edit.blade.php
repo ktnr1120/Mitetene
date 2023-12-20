@@ -12,7 +12,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <h1>Edit Post</h1>
 
-                <form action="{{ route('update', $post->id) }}" method="POST">
+                <form action="{{ route('update', $post->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -25,6 +25,17 @@
                         <label for="body">Body</label>
                         <textarea name="post[body]">{{ $post->body }}</textarea>
                     </div>
+                    @if($post->image)
+                        <img src="{{ Storage::url($post->image) }}" alt="Current Post Image">
+                        <label for="image">新しい画像選択：</label>
+                        <input type="file" name="post[image]" accept="image/*">
+                        <label>
+                            <input type="checkbox" name="remove_image">画像を削除
+                        </label>
+                    @else
+                        <label for="image">画像選択:</label>
+                        <input type="file" name="post[image]" accept="image/*" required>
+                    @endif
 
                     <!-- Add your category checkboxes here -->
                     <div class="form-group">

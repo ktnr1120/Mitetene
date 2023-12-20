@@ -28,6 +28,12 @@
                         <p>{{ $post->created_at->format('Y,m,d') }}</p>
                         <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
                     </h2>
+                    @foreach($posts as $post)
+                        <div>
+                            <h2>{{ $post->title }}</h2>
+                            <p>{{ $post->body }}</p>
+                        </div>
+                    @endforeach
                     <p class='body'>{{ $post->body }}</p>
                     <h3>カテゴリ:</h3><!-- 12/13現在未実装-->
                     <ul>

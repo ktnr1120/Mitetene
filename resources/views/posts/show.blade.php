@@ -23,6 +23,10 @@
                     <h3>本文</h3>
                     <p class='body'>{{ $post->body }}</p>    
                 </div>
+                @if($post->image)
+                    <img src="{{ Strage::url($post->image) }}" alt="Post Image">
+                @endif
+                <a href="{{ route('index') }}">一覧にもどる</a>
             </div>
             @if ($post->categories)
                 <h2>カテゴリ:</h2>
