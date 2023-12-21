@@ -19,7 +19,6 @@ class Post extends Model
         'Children_ID',
         'Date',
         'weather_id',
-        'image',
         'IsDelete'
     ];
     
@@ -39,6 +38,11 @@ class Post extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+    
+    public function image()
+    {
+        return $this->hasOne(Image::class);
     }
         
     public function getPaginateByLimit(int $limit_count = 5)

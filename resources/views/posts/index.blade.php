@@ -32,6 +32,10 @@
                         <div>
                             <h2>{{ $post->title }}</h2>
                             <p>{{ $post->body }}</p>
+                            <!-- 画像があれば表示 -->
+                            @if ($post->image)
+                                <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image">
+                            @endif
                         </div>
                     @endforeach
                     <p class='body'>{{ $post->body }}</p>
