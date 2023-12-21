@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('weathers', WeatherController::class);
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('show');
     Route::post('/posts', [PostController::class, 'store'])->name('store');
+    Route::post('/posts/{postId}/upload-image', [ImageController::class, 'upload']);
     Route::put('/posts/{post}', [PostController::class, 'update'])->name('update');
     Route::delete('/posts/{post}', [PostController::class, 'delete'])->name('delete');
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('edit');

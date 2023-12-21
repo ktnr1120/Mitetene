@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Weather;
+use App\Models\Image;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -40,6 +41,8 @@ class PostController extends Controller
     
         // デバッグ用：ログにユーザー情報を出力
         \Log::info('Logged in user:', ['user' => $user]);
+        \Log::info('User ID:', ['user_id' => $request->user()->id]);
+        $post = new Post(); // Post モデルの取得方法により変更があるかもしれません
     
         // リクエストから投稿データを取得
         $input = $request['post'];
@@ -49,9 +52,6 @@ class PostController extends Controller
             'Date' => now(),
             'weather_id' => $request->input('weather_id'),
             ];
-    
-        // ログインしているユーザーのuser_idを投稿データに設定
-        $input['User_ID'] = $user->id;
     
         // Date カラムを現在の日付に設定
         $input['Date'] = now();
@@ -66,9 +66,15 @@ class PostController extends Controller
         // 画像アップロード処理
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('posts', 's3');
-            $input['image_path'] = $imagePath;
+        
+            //Imageモデルを使って　imagesテーブルに保存
+            $image = new Image([
+                'post_id' => $post->id,
+                'url' => $imagePath,
+            ]);
+            $image->save();
+            \Log::info('Image saved:', ['image_id' => $image->id]);
         }
-    
         // デバッグ用：ログに投稿データを出力
         \Log::info('Post data:', ['input' => $input]);
     
