@@ -24,7 +24,7 @@
                     <p class='body'>{{ $post->body }}</p>    
                 </div>
                 @if($post->image)
-                    <img src="{{ Strage::url($post->image) }}" alt="Post Image">
+                    <img src="{{ Storage::url($post->image) }}" alt="Post Image">
                 @endif
                 <a href="{{ route('index') }}">一覧にもどる</a>
             </div>

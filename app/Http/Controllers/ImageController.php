@@ -11,9 +11,17 @@ class ImageController extends Controller
 {
     public function upload(Request $request, $postId)
     {
-        //画像をアップロード
-        $imagePath = Storage::disk('s3')->put('images', $request->file('image'));
+        //画像アップロード前にディレクトリを作成
+        Storage::disk('s3')->makeDirectory('posts');
+        $imagePath = Storage::disk('s3')->put('posts', $request->file('image'));
         
+        //ImageControllerのuploadメソッド内にログを挿入
+        \Log::info('Image upload start');
+        
+        //画像をアップロード
+        $imagePath = Storage::disk('s3')->put('posts', $request->file('image'));
+        
+        \Log::info('Image upload end', ['imagePath' => $imagePath]);
         //アップロード後の画像URLを取得
         $imageUrl = Storage::disk('s3')->url($imagePath);
         
