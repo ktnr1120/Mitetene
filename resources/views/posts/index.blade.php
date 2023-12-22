@@ -31,7 +31,6 @@
                     @foreach($posts as $post)
                         <div>
                             <h2>{{ $post->title }}</h2>
-                            <p>{{ $post->body }}</p>
                             <!-- 画像があれば表示 -->
                             @if ($post->image)
                                 <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image">
@@ -39,7 +38,7 @@
                         </div>
                     @endforeach
                     <p class='body'>{{ $post->body }}</p>
-                    <h3>カテゴリ:</h3><!-- 12/13現在未実装-->
+                    <h3>カテゴリ:</h3>
                     <ul>
                         @if ($post->categories)
                             @foreach ($post->categories as $category)

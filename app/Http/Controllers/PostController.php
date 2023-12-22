@@ -73,7 +73,12 @@ class PostController extends Controller
                 'url' => $imagePath,
             ]);
             $image->save();
-            \Log::info('Image saved:', ['image_id' => $image->id]);
+            // $image->id が存在する場合のみログに記録
+            if ($image->id) {
+                \Log::info('Image saved:', ['image_id' => $image->id]);
+            } else {
+                \Log::info('Image saved, but image_id id not available');
+            }
         }
         // デバッグ用：ログに投稿データを出力
         \Log::info('Post data:', ['input' => $input]);
