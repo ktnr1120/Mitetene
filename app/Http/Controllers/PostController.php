@@ -30,8 +30,9 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $weathers = Weather::all();
+        $images = Image::all();
         
-        return view('posts.create', compact('categories', 'weathers'));
+        return view('posts.create', compact('categories', 'weathers','images'));
     }
     
     public function store(PostRequest $request, Post $post)
@@ -64,15 +65,14 @@ class PostController extends Controller
         $input['weather_id'] = $weather->id;
         
         // 画像アップロード処理
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('posts', 's3');
+        if ($request->hasFile('post[image]')) {
+            $imagePath = $request->file('post[image]')->store('posts', 's3');
         
             //Imageモデルを使って　imagesテーブルに保存
             $image = new Image([
-                'post_id' => $post->id,
                 'url' => $imagePath,
             ]);
-            $image->save();
+            $post->image()->save($image);
             // $image->id が存在する場合のみログに記録
             if ($image->id) {
                 \Log::info('Image saved:', ['image_id' => $image->id]);

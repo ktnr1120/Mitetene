@@ -7,7 +7,7 @@
 <x-app-layout>
     <body>
         <h1>みててね</h1>
-        <form action="/posts" method="POST">
+        <form action="/posts" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="weather">天気</label>

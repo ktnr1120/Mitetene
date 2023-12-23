@@ -11,7 +11,7 @@
         <p>ログインユーザー：{{ Auth::user()->name }}</p>
         <h1>みててね</h1>
         <a href='/posts/create'>投稿</a>
-        
+        <!--
         <div class='categories'>
             <h2>カテゴリ一覧</h2>
             <ul>
@@ -20,6 +20,7 @@
                 @endforeach
             </ul>
         </div>
+        -->
     
         <div class='posts'>
             @foreach ($posts as $post)
@@ -30,14 +31,13 @@
                     </h2>
                     @foreach($posts as $post)
                         <div>
-                            <h2>{{ $post->title }}</h2>
                             <!-- 画像があれば表示 -->
                             @if ($post->image)
                                 <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image">
                             @endif
                         </div>
                     @endforeach
-                    <p class='body'>{{ $post->body }}</p>
+                    
                     <h3>カテゴリ:</h3>
                     <ul>
                         @if ($post->categories)
