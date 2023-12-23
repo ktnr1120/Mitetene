@@ -20,13 +20,11 @@
             </h1>
             <div class="content">
                 <div class="content_post">
-                    <h3>本文</h3>
                     <p class='body'>{{ $post->body }}</p>    
                 </div>
                 @if($post->image)
                     <img src="{{ Storage::url($post->image) }}" alt="Post Image">
                 @endif
-                <a href="{{ route('index') }}">一覧にもどる</a>
             </div>
             @if ($post->categories)
                 <h2>カテゴリ:</h2>
@@ -39,10 +37,10 @@
                 <p>カテゴリ情報がありません。</p>
             @endif
             <div class="edit">
-                <a href="/posts/{{ $post->id }}/edit">edit</a>
+                <a href="/posts/{{ $post->id }}/edit">再編集する</a>
             </div>
             <div class="footer">
-                <a href="/">戻る</a>
+                <a href="/">一覧にもどる</a>
             </div>
         </body>
     </x-app-layout>
