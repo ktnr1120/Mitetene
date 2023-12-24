@@ -22,6 +22,7 @@ class ImageController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+
         // 画像をアップロード
         $imagePath = Storage::disk('s3')->put("posts/{$postId}", $request->file('image'));
 

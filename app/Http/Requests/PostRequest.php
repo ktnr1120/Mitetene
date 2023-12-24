@@ -11,6 +11,7 @@ class PostRequest extends FormRequest
         return [
             'post.title' => 'required|string|max:100',
             'post.body' => 'required|string|max:4000',
+            'post.image' => 'required | image | mimes: jpeg,png,jpg,gif | max:2048' //エラー解消用画像必須にする
         ];
     }
 }

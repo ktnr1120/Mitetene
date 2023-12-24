@@ -10,6 +10,8 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
@@ -30,9 +32,8 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $weathers = Weather::all();
-        $images = Image::all();
         
-        return view('posts.create', compact('categories', 'weathers','images'));
+        return view('posts.create', compact('categories', 'weathers',));
     }
     
     public function store(PostRequest $request, Post $post)
@@ -43,14 +44,15 @@ class PostController extends Controller
         // デバッグ用：ログにユーザー情報を出力
         \Log::info('Logged in user:', ['user' => $user]);
         \Log::info('User ID:', ['user_id' => $request->user()->id]);
-        $post = new Post(); // Post モデルの取得方法により変更があるかもしれません
+        
+        //Postモデルの取得方法を修正
+        $post = new Post(); 
     
         // リクエストから投稿データを取得
         $input = $request['post'];
     
         $input += [
             'user_id' => $request->user()->id,
-            'Date' => now(),
             'weather_id' => $request->input('weather_id'),
             ];
     
@@ -79,6 +81,23 @@ class PostController extends Controller
             } else {
                 \Log::info('Image saved, but image_id id not available');
             }
+        }
+        
+        //バリデーションの追加
+        $validator = Validator::make($input, [
+            'post[image]' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            // 他のバリデーションルールを追加
+        ]);
+
+    
+        // バリデーションエラーがある場合
+        if ($validator->fails()) {
+            
+            \Log::error('Validation error:', ['errors' => $validator->errors()->toArray()]);
+                
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
         }
         // デバッグ用：ログに投稿データを出力
         \Log::info('Post data:', ['input' => $input]);
