@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label for="post-image">画像選択</label>
-                <input type="file" name="post[image]" accept="image/*" required>
+                <input type="file" id="post-image" name="post.image" accept="image/*" required>
                 @if (@$errors->has('post.image'))
                     <p style="color: red;">{{ @$errors->first('post.image') }}</p>
                 @endif

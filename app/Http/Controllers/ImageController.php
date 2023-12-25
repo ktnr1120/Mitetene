@@ -12,19 +12,13 @@ class ImageController extends Controller
     public function upload(Request $request, $postId)
 {
     try {
-        //既存しない場合のみディレクトリを作成
+        // 既存しない場合のみディレクトリを作成
         if (!Storage::disk('s3')->exists("posts/{$postId}")) {
             Storage::disk('s3')->makeDirectory("posts/{$postId}");
         }
-
-        // 画像のバリデーション
-        $this->validate($request, [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-
+        
         // 画像をアップロード
-        $imagePath = Storage::disk('s3')->put("posts/{$postId}", $request->file('image'));
+        $imagePath = Storage::disk('s3')->put("posts/{$postId}", $request->file('post.image'));
 
         // 画像URLの保存
         $imageUrl = Storage::disk('s3')->url($imagePath);
