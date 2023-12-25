@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\ImageController;
 
 class PostController extends Controller
 {
@@ -67,8 +68,12 @@ class PostController extends Controller
         $input['weather_id'] = $weather->id;
         
         // 画像アップロード処理
-        if ($request->hasFile('post[image]')) {
-            $imagePath = $request->file('post[image]')->store('posts', 's3');
+        // 画像がフォームで送信されたかどうかを確認
+        if ($request->hasFile('post.image')) {
+            // フォームから送信された画像をS3ストレージの'images'ディレクトリに保存
+            $imagePath = $request->file('post.image')->store('mitetene0809/image','s3');
+            // デバッグ用：ファイルが正しくアップロードされたか確認
+            dd($request->file('post.image'));
         
             //Imageモデルを使って　imagesテーブルに保存
             $image = new Image([
@@ -85,7 +90,7 @@ class PostController extends Controller
         
         //バリデーションの追加
         $validator = Validator::make($input, [
-            'post[image]' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'post.image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             // 他のバリデーションルールを追加
         ]);
 
