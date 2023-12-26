@@ -12,6 +12,8 @@ class ImageController extends Controller
     public function upload(Request $request, $postId)
 {
     try {
+        // ディレクトリの作成ログを追加
+        \Log::info('Directory creation:', ['path' => "posts/{$postId}"]);
         // 既存しない場合のみディレクトリを作成
         if (!Storage::disk('s3')->exists("posts/{$postId}")) {
             Storage::disk('s3')->makeDirectory("posts/{$postId}");

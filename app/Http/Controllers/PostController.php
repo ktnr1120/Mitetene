@@ -45,12 +45,10 @@ class PostController extends Controller
         // デバッグ用：ログにユーザー情報を出力
         \Log::info('Logged in user:', ['user' => $user]);
         \Log::info('User ID:', ['user_id' => $request->user()->id]);
-        
-        //Postモデルの取得方法を修正
-        $post = new Post(); 
     
         // リクエストから投稿データを取得
         $input = $request['post'];
+        // dd($request['post']);
     
         $input += [
             'user_id' => $request->user()->id,
@@ -69,16 +67,23 @@ class PostController extends Controller
         
         // 画像アップロード処理
         // 画像がフォームで送信されたかどうかを確認
+        dd($request->file('post.image'));
         if ($request->hasFile('post.image')) {
             // フォームから送信された画像をS3ストレージの'images'ディレクトリに保存
             $imagePath = $request->file('post.image')->store('mitetene0809/image','s3');
             // デバッグ用：ファイルが正しくアップロードされたか確認
-            dd($request->file('post.image'));
+            $uploadedFile = $request->file('post.image');
+            // dd($uploadedFile, $uploadedFile->getClientSize(), $uploadedFile->getMimeType());
+            
+            \Log::error('Validation error:', ['errors' => $validator->errors()->toArray()]);
+
         
             //Imageモデルを使って　imagesテーブルに保存
             $image = new Image([
                 'url' => $imagePath,
             ]);
+            $image->user_id = $post->user_id;
+            $image->weather = $post->weather_id;
             $post->image()->save($image);
             // $image->id が存在する場合のみログに記録
             if ($image->id) {
@@ -88,22 +93,6 @@ class PostController extends Controller
             }
         }
         
-        //バリデーションの追加
-        $validator = Validator::make($input, [
-            'post.image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            // 他のバリデーションルールを追加
-        ]);
-
-    
-        // バリデーションエラーがある場合
-        if ($validator->fails()) {
-            
-            \Log::error('Validation error:', ['errors' => $validator->errors()->toArray()]);
-                
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
         // デバッグ用：ログに投稿データを出力
         \Log::info('Post data:', ['input' => $input]);
     
