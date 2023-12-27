@@ -37,7 +37,7 @@ class PostController extends Controller
         return view('posts.create', compact('categories', 'weathers',));
     }
     
-    public function store(PostRequest $request, Post $post)
+    public function store(PostRequest $request)
     {
         // 認証されているユーザーの情報を取得
         $user = Auth::user();
@@ -45,6 +45,9 @@ class PostController extends Controller
         // デバッグ用：ログにユーザー情報を出力
         \Log::info('Logged in user:', ['user' => $user]);
         \Log::info('User ID:', ['user_id' => $request->user()->id]);
+        
+        //Postモデルからインスタンス作成
+        $post = new Post();
     
         // リクエストから投稿データを取得
         $input = $request['post'];
@@ -65,26 +68,25 @@ class PostController extends Controller
         // 天気情報を投稿データに組み込む
         $input['weather_id'] = $weather->id;
         
-        // 画像アップロード処理
-        // 画像がフォームで送信されたかどうかを確認
-        dd($request->file('post.image'));
+        // [画像アップロード処理]画像がフォームで送信されたかどうかを確認
+        // dd($request->file('post.image'));
         if ($request->hasFile('post.image')) {
             // フォームから送信された画像をS3ストレージの'images'ディレクトリに保存
             $imagePath = $request->file('post.image')->store('mitetene0809/image','s3');
             // デバッグ用：ファイルが正しくアップロードされたか確認
-            $uploadedFile = $request->file('post.image');
             // dd($uploadedFile, $uploadedFile->getClientSize(), $uploadedFile->getMimeType());
             
-            \Log::error('Validation error:', ['errors' => $validator->errors()->toArray()]);
-
+            // バリデーションを通過したデータを取得
+            $validatedData = $request->validated();
         
             //Imageモデルを使って　imagesテーブルに保存
             $image = new Image([
                 'url' => $imagePath,
             ]);
-            $image->user_id = $post->user_id;
-            $image->weather = $post->weather_id;
+            
+            //対応する投稿に画像を紐づけ
             $post->image()->save($image);
+            
             // $image->id が存在する場合のみログに記録
             if ($image->id) {
                 \Log::info('Image saved:', ['image_id' => $image->id]);
@@ -92,9 +94,6 @@ class PostController extends Controller
                 \Log::info('Image saved, but image_id id not available');
             }
         }
-        
-        // デバッグ用：ログに投稿データを出力
-        \Log::info('Post data:', ['input' => $input]);
     
         // 投稿データを保存
         $post->fill($input)->save();
