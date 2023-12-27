@@ -22,10 +22,12 @@
                 <div class="content_post">
                     <p class='body'>{{ $post->body }}</p>    
                 </div>
-                @if($post->image)
-                    <img src="{{ Storage::url($post->image) }}" alt="Post Image">
-                @endif
             </div>
+            @if ($post->image)
+                    <img src="{{ Storage::disk('s3')->url('mitetene0809/image/' . $post->image->url) }}" alt="Post Image">
+
+            @endif
+            
             @if ($post->categories)
                 <h2>カテゴリ:</h2>
                 <ul>

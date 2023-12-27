@@ -49,7 +49,7 @@
                     <form action="/posts/{{ $post->id }}" id="form_{{$post->id}}" method="post">
                         @csrf
                         @method('DELETE')
-                        <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
+                        <p style="color: red;"><button type="button" onclick="deletePost({{ $post->id }})">削除</button></p>
                     </form>
                 </div>
             @endforeach
