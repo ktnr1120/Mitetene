@@ -23,8 +23,10 @@
                     <p class='body'>{{ $post->body }}</p>    
                 </div>
             </div>
+            @dd ($post)
             @if ($post->image)
-                    <img src="{{ Storage::disk('s3')->url('mitetene0809/image/' . $post->image->url) }}" alt="Post Image">
+            @dd ($post->image)
+                <img src="{{ Storage::disk('s3')->url('mitetene0809/image/' . $post->image->url) }}" alt="Post Image">
 
             @endif
             
