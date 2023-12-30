@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ChildController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    
     Route::get('/', [PostController::class, 'index'])->name('index');
     Route::get('/posts/create', [PostController::class, 'create'])->name('create');
     Route::resource('weathers', WeatherController::class);
@@ -33,12 +33,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('edit');
 });
 
+// 他のルート
 Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth")->name('categories.index'); 
 
-Route::middleware('auth')->group(function () {
+// 家族構成のルート
+Route::middleware(['auth'])->group(function () {
+    Route::get('/family/familystructure', [ChildController::class, 'familystructure'])->name('familystructure');
+    Route::post('/family', [ChildController::class, 'store'])->name('family.store');
+    Route::delete('/family/{id}', [ChildController::class, 'destroy'])->name('family.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
