@@ -14,11 +14,10 @@ class CreateChildrenTable extends Migration
     public function up()
     {
         Schema::create('children', function (Blueprint $table) {
-            $table->id('children_ID');
-            $table->unsignedBigInteger('User_ID');
-            $table->foreign('User_ID')->references('id')->on('users')->onDelete('cascade');
-            $table->string('child_Name');
-            $table->timestamps(); // created_at, updated_at カラムを作成
+            $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -31,4 +30,4 @@ class CreateChildrenTable extends Migration
     {
         Schema::dropIfExists('children');
     }
-}
+};

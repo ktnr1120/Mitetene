@@ -16,7 +16,10 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
-                        {{ __('index') }}
+                        {{ __('投稿一覧') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('familystructure')" active="request()->routeIs('familystructure')">
+                        {{ __('家族') }}
                     </x-nav-link>
                 </div>
             </div>
