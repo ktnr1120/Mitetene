@@ -39,7 +39,6 @@ class ImageController extends Controller
     
             // 対応する投稿に画像を紐づけ
             $post = Post::find($postId);
-            $image->post_id = $postId; //image_idのnull回避
             $post->image()->save($image);
     
             return redirect()->back()->with('success', '画像がアップロードされました.');
