@@ -68,11 +68,18 @@ class PostController extends Controller
         // 天気情報を投稿データに組み込む
         $input['weather_id'] = $weather->id;
         
+    
+        // 投稿データを保存
+        $post->fill($input)->save();
+        
         // [画像アップロード処理]画像がフォームで送信されたかどうかを確認
         // dd($request->file('post.image'));
         if ($request->hasFile('post.image')) {
             // フォームから送信された画像をS3ストレージの'images'ディレクトリに保存
             $imagePath = $request->file('post.image')->store('mitetene0809/image','s3');
+            // コードの適切な位置に追加
+            //\Log::info('Generated S3 URL:', ['url' => Storage::disk('s3')->url('mitetene0809/image/' . $post->image->url)]);
+
             // デバッグ用：ファイルが正しくアップロードされたか確認
             // dd($uploadedFile, $uploadedFile->getClientSize(), $uploadedFile->getMimeType());
             
@@ -86,7 +93,9 @@ class PostController extends Controller
             
             //対応する投稿に画像を紐づけ
             $post->image()->save($image);
+        
             
+            //dd($image);
             // $image->id が存在する場合のみログに記録
             if ($image->id) {
                 \Log::info('Image saved:', ['image_id' => $image->id]);
@@ -94,9 +103,6 @@ class PostController extends Controller
                 \Log::info('Image saved, but image_id id not available');
             }
         }
-    
-        // 投稿データを保存
-        $post->fill($input)->save();
         
         // 選択されたカテゴリを中間テーブルに紐付ける
         $post->categories()->sync($request->input('categories', []));

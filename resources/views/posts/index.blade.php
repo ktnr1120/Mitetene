@@ -29,15 +29,10 @@
                         <p>{{ $post->created_at->format('Y,m,d') }}</p>
                         <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
                     </h2>
-                    @foreach($posts as $post)
-                        <div>
-                            <!-- 画像があれば表示 -->
-                            @if ($post->image)
-                                <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image">
-                            @endif
-                        </div>
-                    @endforeach
-                    
+                    <!-- 画像があれば表示 -->
+                        @if ($post->image)
+                            <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image" width="200" heigth="100">
+                        @endif
                     <h3>カテゴリ:</h3>
                     <ul>
                         @if ($post->categories)
