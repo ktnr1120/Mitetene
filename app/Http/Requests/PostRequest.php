@@ -12,6 +12,7 @@ class PostRequest extends FormRequest
             'post.title' => 'required|string|max:100',
             'post.body' => 'required|string|max:4000',
             'post.image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            //'child_name' => 'required|string|max:255',
         ];
     }
 }

@@ -42,6 +42,21 @@
                 @endforeach
             </div>
             
+            @if($children && count($children) > 1)
+                <div class="form-group">
+                    <label for="children">子ども</label>
+                    <div>
+                        @foreach ($children as $child)
+                            <div class="form-check">
+                                <input type="checkbox" name="children[]" value="{{ $child->id }}" class="form-check-input" id="child{{ $child->id }}">
+                                <label class="form-check-label" for="child{{ $child->id }}">{{ $child->name }}</label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            
             <input type="submit" value="保存"/>
         </form>
         <div class="back">[<a href="/">back</a>]</div>
