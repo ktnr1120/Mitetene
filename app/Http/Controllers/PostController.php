@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\Weather;
 use App\Models\Image;
+use App\Models\Child;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -33,8 +34,9 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $weathers = Weather::all();
+        $children = Child::all();
         
-        return view('posts.create', compact('categories', 'weathers',));
+        return view('posts.create', compact('categories', 'weathers','children'));
     }
     
     public function store(PostRequest $request)
@@ -57,7 +59,15 @@ class PostController extends Controller
             'user_id' => $request->user()->id,
             'weather_id' => $request->input('weather_id'),
             ];
-    
+        
+        //データベースに新しい子どもを作成
+        $child = auth()->user()->children()->create([
+            'name' => $input['child_name'],
+        ]);
+        
+        //投稿データに子どものIDを追加
+        $input['child_id'] = $child->id;
+        
         // Date カラムを現在の日付に設定
         $input['Date'] = now();
         
