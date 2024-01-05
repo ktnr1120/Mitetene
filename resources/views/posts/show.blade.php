@@ -37,7 +37,13 @@
                 <p>カテゴリ情報がありません。</p>
             @endif
             
-            <p><strong>子ども：</strong>{{ $post->child->name }}ちゃん</p>
+            @if(isset($selectedChild))
+                <p><strong>子ども：</strong>{{ $selectedChild->name }}ちゃん</p>
+            @else
+                <p><strong>子ども：</strong>いません</p>
+            @endif
+
+
             <div class="edit">
                 <a href="/posts/{{ $post->id }}/edit">再編集する</a>
             </div>
