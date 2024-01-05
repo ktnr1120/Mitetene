@@ -19,6 +19,7 @@ class Post extends Model
         'Children_ID',
         'Date',
         'weather_id',
+        'child_id',
         'IsDelete'
     ];
     

@@ -27,16 +27,20 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        return view('posts.show')->with(['post' => $post]);
+        $userChildren = auth()->user()->children;
+        
+        return view('posts.show', compact('userChildren'))->with(['post' => $post]);
     }
     
     public function create()
     {
         $categories = Category::all();
         $weathers = Weather::all();
-        $children = Child::all();
         
-        return view('posts.create', compact('categories', 'weathers','children'));
+        //ログインしているユーザーの子ども情報を取得
+        $userChildren = auth()->user()->children;
+        
+        return view('posts.create', compact('categories', 'weathers','userChildren'));
     }
     
     public function store(PostRequest $request)
@@ -47,9 +51,6 @@ class PostController extends Controller
         // デバッグ用：ログにユーザー情報を出力
         \Log::info('Logged in user:', ['user' => $user]);
         \Log::info('User ID:', ['user_id' => $request->user()->id]);
-        
-        //Postモデルからインスタンス作成
-        $post = new Post();
     
         // リクエストから投稿データを取得
         $input = $request['post'];
@@ -60,17 +61,6 @@ class PostController extends Controller
             'weather_id' => $request->input('weather_id'),
             ];
         
-        //データベースに新しい子どもを作成
-        $child = auth()->user()->children()->create([
-            'name' => $input['child_name'],
-        ]);
-        
-        //投稿データに子どものIDを追加
-        $input['child_id'] = $child->id;
-        
-        // Date カラムを現在の日付に設定
-        $input['Date'] = now();
-        
         // 天気情報を取得
         $weatherId = $request->input('weather_id');
         $weather = Weather::find($weatherId);
@@ -78,7 +68,41 @@ class PostController extends Controller
         // 天気情報を投稿データに組み込む
         $input['weather_id'] = $weather->id;
         
-    
+        // Date カラムを現在の日付に設定
+        $input['Date'] = now();
+        
+        // 既存の子ども情報が選択されている場合
+        if ($request->has('child_id')) {
+            $childId = $request->input('child_id');
+            $selectedChild = Child::findOrFail($childId);
+        
+            // $post インスタンスの生成時に user_id を指定
+            $post = $selectedChild->posts()->create([
+                'title' => $input['title'],
+                'body' => $input['body'],
+                'Date' => now(),
+                'weather_id' => $weather->id,
+                'user_id' => $selectedChild->user_id, // 追加
+            ]);
+        } else {
+            // 新しい子ども情報を作成して投稿に紐づけ
+            $child = $user->children()->create([
+                'name' => $childName,
+            ]);
+        
+            // $post インスタンスの生成時に user_id を指定
+            $post = $child->posts()->create([
+                'title' => $input['title'],
+                'body' => $input['body'],
+                'Date' => now(),
+                'weather_id' => $weather->id,
+                'user_id' => $user->id, // もしくは $child->user_id としても良い
+            ]);
+        }
+
+        
+        //Postモデルからインスタンス作成
+        $post = new Post();
         // 投稿データを保存
         $post->fill($input)->save();
         
