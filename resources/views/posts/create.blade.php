@@ -43,24 +43,24 @@
             </div>
             
 
-            @if($userChildren->count() > 0)
-                <!-- ユーザーが子どもを1人以上登録している場合の処理 -->
-                <div class="form-group">
-                    <label for"child_id">子ども</label>
-                    <select name="child_id" class="form-control">
-                        @foreach ($userChildren as $child)
-                        <option value="{{ $child->id }}">{{ $child->name }}</option>
+                @if($userChildren->count() > 0)
+                    <!-- ユーザーが子どもを1人以上登録している場合の処理 -->
+                    <div class="form-group">
+                        <label for="children">子ども</label>
+                        @foreach($userChildren as $child)
+                            <input type="checkbox" name="children[]" value="{{ $child->id }}">
+                            <label>{{ $child->name }}</label><br>
                         @endforeach
-                    </select>
-                </div>
-            @elseif($userChildren->count() == 1)
-                <!-- ユーザーが子どもを登録していない場合の処理 -->
-                @php
-                    $child = $userChildren->first();
-                @endphp
-                <input type="hidden" name="child_id" value="{{ $child->id }}">
-                <p>登録した1人: {{ $child->name }}</p>
-            @endif
+                    </div>
+                @elseif($userChildren->count() == 1)
+                    <!-- ユーザーが子どもを登録していない場合の処理 -->
+                    @php
+                        $child = $userChildren->first();
+                    @endphp
+                    <input type="hidden" name="children" value="{{ $child->id }}">
+                    <p>登録した1人: {{ $child->name }}</p>
+                @endif
+
             <input type="submit" value="保存"/>
         </form>
         <div class="back">[<a href="/">back</a>]</div>

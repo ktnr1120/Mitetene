@@ -48,7 +48,7 @@ class Post extends Model
     
     public function child()
     {
-        return $this->belongsTo(Child::class);
+        return $this->belongsTo(Child::class, 'post_id');
     }
         
     public function getPaginateByLimit(int $limit_count = 5)
