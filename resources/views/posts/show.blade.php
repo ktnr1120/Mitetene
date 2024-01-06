@@ -37,8 +37,12 @@
                 <p>カテゴリ情報がありません。</p>
             @endif
             
-            @if(isset($selectedChild))
-                <p><strong>子ども：</strong>{{ $selectedChild->name }}ちゃん</p>
+            @if($post->children->count() > 0)
+                <p><strong>子ども：</strong>
+                    @foreach($post->children as $child)
+                        {{ $child->name }}ちゃん
+                    @endforeach
+                </p>
             @else
                 <p><strong>子ども：</strong>いません</p>
             @endif

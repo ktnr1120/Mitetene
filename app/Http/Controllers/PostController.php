@@ -70,41 +70,43 @@ class PostController extends Controller
         
         // Date カラムを現在の日付に設定
         $input['Date'] = now();
-        
-        // 既存の子ども情報が選択されている場合
-        if ($request->has('child_id')) {
-            $childId = $request->input('child_id');
-            $selectedChild = Child::findOrFail($childId);
-        
-            // $post インスタンスの生成時に user_id を指定
-            $post = $selectedChild->posts()->create([
-                'title' => $input['title'],
-                'body' => $input['body'],
-                'Date' => now(),
-                'weather_id' => $weather->id,
-                'user_id' => $selectedChild->user_id, // 追加
-            ]);
-        } else {
-            // 新しい子ども情報を作成して投稿に紐づけ
-            $child = $user->children()->create([
-                'name' => $childName,
-            ]);
-        
-            // $post インスタンスの生成時に user_id を指定
-            $post = $child->posts()->create([
-                'title' => $input['title'],
-                'body' => $input['body'],
-                'Date' => now(),
-                'weather_id' => $weather->id,
-                'user_id' => $user->id, // もしくは $child->user_id としても良い
-            ]);
-        }
 
         
         //Postモデルからインスタンス作成
         $post = new Post();
+        //dd($post);
+        
+        try {
+            // 既存の子ども情報が選択されている場合
+            if ($request->has('children')) {
+                $childIds = $request->input('children');
+                \Log::info('Selected Child IDs:', ['child_ids' => $childIds]);
+        
+                $selectedChildren = Child::find($childIds);
+                \Log::info('Selected Children:', ['selected_children' => $selectedChildren]);
+        
+                foreach ($selectedChildren as $selectedChild) {
+                    // $post インスタンスの生成時に user_id を指定
+                    $post = $selectedChild->posts()->create([
+                        'title' => $input['title'],
+                        'body' => $input['body'],
+                        'Date' => now(),
+                        'weather_id' => $weather->id,
+                        'user_id' => $selectedChild->user_id,
+                    ]);
+                    \Log::info('Post created:', ['post' => $post]);
+                }
+            }
+        } catch (\Exception $e) {
+            \Log::error('Exception occurred:', ['message' => $e->getMessage()]);
+        }
+
+
+        //dd($request->all());
         // 投稿データを保存
         $post->fill($input)->save();
+        //dd($post);
+        
         
         // [画像アップロード処理]画像がフォームで送信されたかどうかを確認
         // dd($request->file('post.image'));
