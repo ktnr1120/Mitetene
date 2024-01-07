@@ -57,8 +57,11 @@
                     @php
                         $child = $userChildren->first();
                     @endphp
-                    <input type="hidden" name="children" value="{{ $child->id }}">
+                    <input type="hidden" name="children[]" value="{{ $child->id }}">
                     <p>登録した1人: {{ $child->name }}</p>
+                @else
+                    <!-- ユーザーが子どもを一切登録していない場合の処理　-->
+                    <p>子どもが登録されていません</p>
                 @endif
 
             <input type="submit" value="保存"/>

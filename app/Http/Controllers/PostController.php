@@ -77,25 +77,27 @@ class PostController extends Controller
         //dd($post);
         
         try {
-            // 既存の子ども情報が選択されている場合
-            if ($request->has('children')) {
-                $childIds = $request->input('children');
-                \Log::info('Selected Child IDs:', ['child_ids' => $childIds]);
-        
-                $selectedChildren = Child::find($childIds);
-                \Log::info('Selected Children:', ['selected_children' => $selectedChildren]);
-        
-                foreach ($selectedChildren as $selectedChild) {
-                    // $post インスタンスの生成時に user_id を指定
-                    $post = $selectedChild->posts()->create([
-                        'title' => $input['title'],
-                        'body' => $input['body'],
-                        'Date' => now(),
-                        'weather_id' => $weather->id,
-                        'user_id' => $selectedChild->user_id,
-                    ]);
-                    \Log::info('Post created:', ['post' => $post]);
-                }
+        // 既存の子ども情報が選択されている場合
+        if ($request->has('children')) {
+            $childIds = $request->input('children');
+            \Log::info('Selected Child IDs:', ['child_ids' => $childIds]);
+    
+            $selectedChildren = Child::find($childIds);
+            \Log::info('Selected Children:', ['selected_children' => $selectedChildren]);
+    
+            // $post インスタンスの生成時に user_id を指定
+            $post = Post::create([
+                'title' => $input['title'],
+                'body' => $input['body'],
+                'Date' => now(),
+                'weather_id' => $weather->id,
+                'user_id' => $selectedChildren->first()->user_id,
+            ]);
+    
+            // 中間テーブルにデータを挿入
+            $post->children()->attach($childIds);
+    
+            \Log::info('Post created:', ['post' => $post]);
             }
         } catch (\Exception $e) {
             \Log::error('Exception occurred:', ['message' => $e->getMessage()]);
@@ -149,22 +151,53 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('posts.edit', compact('post', 'categories'));
+        $userChildren = Auth::user()->children;
+        return view('posts.edit', compact('post', 'categories', 'userChildren'));
     }
     
     public function update(PostRequest $request, Post $post)
     {
         $input_post = $request['post'];
         $input_post += ['user_id' => $request->user()->id];
+    
+        // カテゴリの同期処理
+        $post->categories()->sync($request->input('categories', []));
+    
+        // 子ども情報の更新処理
+        if ($request->has('children')) {
+            $childIds = $request->input('children');
+            $selectedChildren = Child::find($childIds);
+    
+            // 中間テーブルにデータを追加
+            $post->children()->sync($childIds);
+        } else {
+            // 子どもが選択されていない場合は中間テーブルの関連を解除
+            $post->children()->detach();
+        }
         
         $post->fill($input_post)->save();
         
-        // カテゴリの同期処理
-        $post->categories()->sync($request->input('categories', []));
+        // 画像の変更があるかどうかを確認
+        if ($request->hasFile('post.image')) {
+            // 新しい画像がアップロードされた場合の処理
+            $imagePath = $request->file('post.image')->store('mitetene0809/image','s3');
+    
+            // 既存の画像があれば削除
+            if ($post->image) {
+                Storage::disk('s3')->delete($post->image->url);
+            }
+    
+            // 新しい画像を保存
+            $image = new Image([
+                'url' => $imagePath,
+            ]);
+            $post->image()->save($image);
+            //dd($post);
+        }
         
         return redirect('/posts/' . $post->id);
     }
-    
+
     public function delete(Post $post)
     {
         $post->delete();

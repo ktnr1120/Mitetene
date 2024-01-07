@@ -25,24 +25,35 @@
                         <label for="body">Body</label>
                         <textarea name="post[body]">{{ $post->body }}</textarea>
                     </div>
-                    @if($post->image)
-                        <img src="{{ Storage::url($post->image) }}" alt="Current Post Image">
-                        <label for="image">新しい画像選択：</label>
-                        <input type="file" name="post[image]" accept="image/*">
-                        <label>
-                            <input type="checkbox" name="remove_image">画像を削除
-                        </label>
-                    @else
-                        <label for="image">画像選択:</label>
-                        <input type="file" name="post[image]" accept="image/*" required>
-                    @endif
+                    <div class="form-group">
+                        @if($post->image)
+                            <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Current Post Image" width="200" heigth="100">
+                            <label for="image">新しい画像選択：</label>
+                            <input type="file" id="post-image" name="post[image]" accept="image/*">
+                        @else
+                            <label for="post-image">画像選択</label>
+                            <input type="file" id="post-image" name="post[image]" required>
+                        @endif
+                        @if (@$errors->has('post.image'))
+                            <p style="color: red;">{{ @$errors->first('post.image') }}</p>
+                        @endif
+                    </div>
 
-                    <!-- Add your category checkboxes here -->
+
                     <div class="form-group">
                         <label for="categories">Categories:</label>
                         @foreach ($categories as $category)
                             <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ in_array($category->id, $post->categories->pluck('id')->toArray()) ? 'checked' : '' }}>
                             {{ $category->name }}
+                        @endforeach
+                    </div>
+                    
+                    <!-- 子ども情報を表示し、編集できるセクション -->
+                    <div class="form-group">
+                        <label for="children">子ども</label>
+                        @foreach($userChildren as $child)
+                            <input type="checkbox" name="children[]" value="{{ $child->id }}" {{ in_array($child->id, $post->children->pluck('id')->toArray()) ? 'checked' : '' }}>
+                            <label>{{ $child->name }}</label><br>
                         @endforeach
                     </div>
 
