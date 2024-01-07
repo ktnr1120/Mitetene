@@ -26,6 +26,7 @@
             @if ($post->image)
                 <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image" width="200" heigth="100">
             @endif
+            
             @if ($post->categories)
                 <h2>カテゴリ:</h2>
                 <ul>
@@ -39,12 +40,12 @@
             
             @if($post->children->count() > 0)
                 <p><strong>子ども：</strong>
-                    @foreach($post->children as $child)
+                    @foreach($post->children->unique('id') as $child)
                         {{ $child->name }}ちゃん
                     @endforeach
                 </p>
             @else
-                <p><strong>子ども：</strong>いません</p>
+                <p><strong>子ども：</strong>登録されていません</p>
             @endif
 
 

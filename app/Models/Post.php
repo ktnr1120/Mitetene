@@ -46,9 +46,9 @@ class Post extends Model
         return $this->hasOne(Image::class, 'post_id');
     }
     
-    public function child()
+    public function children()
     {
-        return $this->belongsTo(Child::class, 'post_id');
+        return $this->belongsToMany(Child::class);
     }
         
     public function getPaginateByLimit(int $limit_count = 5)
