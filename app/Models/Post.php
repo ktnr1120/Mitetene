@@ -50,6 +50,11 @@ class Post extends Model
     {
         return $this->belongsToMany(Child::class);
     }
+    
+    public function invite()
+    {
+        return $this->belongsTo(Invite::class);
+    }
         
     public function getPaginateByLimit(int $limit_count = 5)
     {
