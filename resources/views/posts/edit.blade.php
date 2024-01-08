@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group">
                         @if($post->image)
-                            <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Current Post Image" width="200" heigth="100">
+                            <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image" width="200" heigth="100">
                             <label for="image">新しい画像選択：</label>
                             <input type="file" id="post-image" name="post[image]" accept="image/*">
                         @else
@@ -38,7 +38,6 @@
                             <p style="color: red;">{{ @$errors->first('post.image') }}</p>
                         @endif
                     </div>
-
 
                     <div class="form-group">
                         <label for="categories">Categories:</label>
