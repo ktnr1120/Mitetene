@@ -152,7 +152,11 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $userChildren = Auth::user()->children;
-        return view('posts.edit', compact('post', 'categories', 'userChildren'));
+        
+        // 現在の画像を取得
+        $currentImage = $post->image;
+        
+        return view('posts.edit', compact('post', 'categories', 'userChildren', 'currentImage'));
     }
     
     public function update(PostRequest $request, Post $post)
@@ -184,6 +188,9 @@ class PostController extends Controller
     
             // 既存の画像があれば削除
             if ($post->image) {
+                //メタデータの削除
+                $post->image->delete();
+                //ストレージから画像を削除
                 Storage::disk('s3')->delete($post->image->url);
             }
     
