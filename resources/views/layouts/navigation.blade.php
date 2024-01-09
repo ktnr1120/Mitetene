@@ -18,8 +18,11 @@
                     <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
                         {{ __('投稿一覧') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('familystructure')" active="request()->routeIs('familystructure')">
+                    <x-nav-link :href="route('familystructure')" :active="request()->routeIs('familystructure')">
                         {{ __('家族') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('form')" :active="request()->routeIs('form')">
+                        {{ __('招待') }}
                     </x-nav-link>
                 </div>
             </div>

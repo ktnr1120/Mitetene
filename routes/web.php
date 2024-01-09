@@ -6,6 +6,7 @@ use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\InvitationController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/family/familystructure', [ChildController::class, 'familystructure'])->name('familystructure');
     Route::post('/family', [ChildController::class, 'store'])->name('family.store');
     Route::delete('/family/{id}', [ChildController::class, 'destroy'])->name('family.destroy');
+});
+
+//招待メール
+Route::middleware(['auth'])->group(function() {
+    Route::get('/invitation/form', 'InvitationController@showForm')->name('form');
+    Route::post('/invite', 'InvitationController@sendInvitation');
 });
 
 Route::middleware(['auth'])->group(function () {
