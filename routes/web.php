@@ -44,11 +44,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/family/{id}', [ChildController::class, 'destroy'])->name('family.destroy');
 });
 
-//招待メール
+// 招待メール
 Route::middleware(['auth'])->group(function() {
-    Route::get('/invitation/form', 'InvitationController@showForm')->name('form');
-    Route::post('/invite', 'InvitationController@sendInvitation');
+    Route::get('/invitation/form', [InvitationController::class, 'showForm'])->name('form');
+    Route::post('/invite', [InvitationController::class, 'sendInvitation']);
 });
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
