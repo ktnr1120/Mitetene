@@ -17,37 +17,17 @@ class InvitationMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
+     * Build the message.
      *
-     * @return void
+     * @return $this
      */
-    public function __construct()
+    public function build()
     {
-        return $this->view('emails.invitation');
-    }
-
-    /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
-     */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'Invitation Mail',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        return new Content(
-            view: 'view.name',
-        );
+        return $this->view('emails.invitation')
+                    ->envelope([
+                        'subject' => 'Invitation Mail',
+                    ])
+                    ->attachments([]);
     }
 
     /**
