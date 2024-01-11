@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
-use App\Mail\InvitationMail;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\InvitationNotification;
 use App\Models\Invite;
 
 class InvitationController extends Controller
@@ -14,22 +15,24 @@ class InvitationController extends Controller
     {
         return view('invitation.form');
     }
-    
+
     public function sendInvitation(Request $request)
     {
-        //　バリデーションのルール
+        // バリデーションのルール
         $rules = [
             'email' => 'required|email|unique:invitations,email',
         ];
-            
-        //　バリデーション実行
+
+        // バリデーション実行
         $request->validate($rules);
-        
-        //　メール送信処理
+
+        // メール送信処理
         $email = $request->input('email');
-        Mail::to($email)->send(new InvitationMail());
-        
-        //　送信が成功したら成功メッセージを表示
+
+        Notification::route('mail', $email)
+            ->notify(new InvitationNotification());
+
+        // 送信が成功したら成功メッセージを表示
         return redirect('/invite')->with('success', 'Invitation sent successfully');
     }
 }

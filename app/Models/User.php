@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Child::class);
     }
+    
+    public function invite()
+    {
+        return $this->hasMany(Invite::class);
+    }
 }
