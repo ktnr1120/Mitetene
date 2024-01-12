@@ -5,21 +5,24 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Str;
 use Illuminate\Notifications\Notification;
-use Carbon\Carbon
+use Carbon\Carbon;
 
 class InvitationNotification extends Notification
 {
     use Queueable;
+    
+    protected $token;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($token)
     {
-        //
+        $this->token = $token;
     }
 
     /**
@@ -41,21 +44,20 @@ class InvitationNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        
-        $token = $this->token;
         $expiration = Carbon::now()->addHours(24);
-        
+        $url = url('/accept-invitation');
+
         return (new MailMessage)
-                    ->subject('[みててね]　ゲスト招待')
-                    ->view('emails.invitation', ['token' => $notifiable->token]);
+            ->subject('[みててね]　ゲスト招待')
+            ->view('emails.invitation', ['token' => $this->token, 'url' => $url, 'expiration' => $expiration]);
     }
-    
+
     public function toDatabase($notifiable)
     {
         return [
-            'user_id' => auth()->id(), //招待したユーザーのID
+            'user_id' => auth()->id(), // 招待したユーザーのID
             'email' => $notifiable->email,
-            'token' => $notifiable->token,
+            'token' => $this->token,
         ];
     }
 
