@@ -32,8 +32,9 @@ class InvitationController extends Controller
     
         // メール送信処理
         $email = $request->input('email');
+        
         Notification::route('mail', $email)
-            ->notify(new InvitationNotification($token));
+            ->notify(new InvitationNotification($token, $email));
     
         // 送信が成功したら成功メッセージを表示
         return redirect('/invite')->with('success', '招待メールが送信されました');

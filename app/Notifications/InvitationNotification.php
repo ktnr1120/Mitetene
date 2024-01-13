@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class InvitationNotification extends Notification
@@ -14,15 +15,17 @@ class InvitationNotification extends Notification
     use Queueable;
     
     protected $token;
+    protected $email;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($token, $email)
     {
         $this->token = $token;
+        $this->email = $email;
     }
 
     /**
@@ -44,6 +47,8 @@ class InvitationNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        Log::info('Mail will be sent to: ' . $this->email);
+        
         $expiration = Carbon::now()->addHours(24);
         $url = url('/accept-invitation');
 
@@ -56,7 +61,7 @@ class InvitationNotification extends Notification
     {
         return [
             'user_id' => auth()->id(), // 招待したユーザーのID
-            'email' => $notifiable->email,
+            'email' => $this->email,
             'token' => $this->token,
         ];
     }
