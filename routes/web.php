@@ -50,6 +50,12 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/invite', [InvitationController::class, 'sendInvitation']);
 });
 
+//ゲストユーザー
+Route::get('/accept-invitation', [InvitationController::class, 'acceptInvitation']);
+Route::get('/accept-invitation/{token}', [InvitationController::class, 'showAcceptForm'])
+    ->name('guest.register.form');
+Route::post('/accept-invitation/{token}', [InvitationController::class, 'acceptInvitation'])
+    ->name('guest.register');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
