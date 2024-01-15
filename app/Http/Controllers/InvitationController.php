@@ -41,6 +41,21 @@ class InvitationController extends Controller
         return view('invitation.invited')->with('success', '招待メールが送信されました');
     }
     
+    public function showAcceptForm($token)
+    {
+        // トークンが有効かどうか確認
+        $invite = Invite::where('token', $token)->first();
+    
+        if (!$invite) {
+            // トークンが無効な場合の処理
+            abort(404);
+        }
+    
+        // トークンが有効な場合、ゲストユーザー登録のフォームを表示
+        return view('invitation.accept', ['token' => $token]);
+    }
+
+    
     public function acceptInvitation($token)
     {
         $invite = Invite::where('token', $token)->first();
