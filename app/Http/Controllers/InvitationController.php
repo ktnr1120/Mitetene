@@ -43,31 +43,34 @@ class InvitationController extends Controller
     
     public function acceptInvitation($token)
     {
-        // 招待を取得
-        $invitation = Invite::where('token', $token)->first();
+        $invite = Invite::where('token', $token)->first();
     
-        // 招待が存在しないか、有効期限が切れている場合の処理
-        if (!$invitation || $invitation->isExpired()) {
-            abort(404); // または適切なエラーページへリダイレクト
+        if (!$invite) {
+            // トークンが無効な場合の処理
+            abort(404);
         }
     
-        // ゲストユーザーを作成
+        // 既に登録されているユーザーならばログイン
+        $user = User::where('email', $invite->email)->first();
+    
+        if ($user) {
+            Auth::login($user);
+            return redirect('/dashboard'); // ログイン後のリダイレクト先を適切に設定
+        }
+    
+        // ゲストユーザーとして登録
         $guestUser = User::create([
-            'name' => request('name'),
-            'email' => $invitation->email,
-            'password' => Hash::make(request('password')),
+            'name' => $invite->name,
+            'email' => $invite->email,
+            'password' => Hash::make($invite->password),
         ]);
     
-        // 招待テーブルの更新
-        $invitation->update([
-            'user_id' => $guestUser->id,
-            'accepted_at' => now(),
-        ]);
-    
-        // ログイン処理（ゲストユーザーとして）
+        // ログイン
         Auth::login($guestUser);
     
-        // リダイレクト先を変更する場合は、適切なルートやURLに変更してください
-        return redirect('/dashboard');
+        // トークンを無効化
+        $invite->delete();
+    
+        return redirect('/dashboard'); // ログイン後のリダイレクト先を適切に設定
     }
 }
