@@ -50,8 +50,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/invite', [InvitationController::class, 'sendInvitation']);
 });
 
-//ゲストユーザー
-Route::get('/accept-invitation', [InvitationController::class, 'acceptInvitation']);
+// ゲストユーザー
 Route::get('/accept-invitation/{token}', [InvitationController::class, 'showAcceptForm'])
     ->name('guest.register.form');
 Route::post('/accept-invitation/{token}', [InvitationController::class, 'acceptInvitation'])
