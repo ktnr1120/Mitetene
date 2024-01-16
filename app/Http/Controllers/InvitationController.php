@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\InvitationNotification;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Invite;
+use App\Models\User;
 
 class InvitationController extends Controller
 {
@@ -33,6 +34,13 @@ class InvitationController extends Controller
 
         // メール送信処理
         $email = $request->input('email');
+        
+        //　メール送信時の保存処理
+        Invite::create([
+            'user_id' => auth()->id(),
+            'email' => $email,
+            'token' => $token,
+        ]);
 
         Notification::route('mail', $email)
             ->notify(new InvitationNotification($token, $email));
@@ -60,8 +68,8 @@ class InvitationController extends Controller
     {
         $invite = Invite::where('token', $token)->first();
     
-        if (!$invite) {
-            // トークンが無効な場合の処理
+        if (!$invite || now() > $invite->expiration) {
+            // トークンが無効な場合または有効期限切れの場合の処理
             abort(404);
         }
     

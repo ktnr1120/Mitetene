@@ -17,14 +17,28 @@
                         <form method="POST" action="{{ route('guest.register', ['token' => $token]) }}">
                             @csrf
 
+                            {{-- 名前 --}}
                             <div class="mb-3">
                                 <label for="name" class="form-label">ユーザーネーム</label>
                                 <input type="text" name="name" id="name" class="form-control" required>
                             </div>
 
+                            {{-- メールアドレス --}}
+                            <div class="mb-3">
+                                <label for="email" class="form-label">メールアドレス</label>
+                                <input type="email" name="email" id="email" class="form-control" required>
+                            </div>
+
+                            {{-- パスワード --}}
                             <div class="mb-3">
                                 <label for="password" class="form-label">パスワード</label>
                                 <input type="password" name="password" id="password" class="form-control" required>
+                            </div>
+
+                            {{-- 確認用パスワード --}}
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label">確認用パスワード</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
                             </div>
 
                             <button type="submit" class="btn btn-primary">登録</button>
