@@ -50,7 +50,7 @@ class InvitationNotification extends Notification
         Log::info('Mail will be sent to: ' . $this->email);
         
         $expiration = Carbon::now()->addHours(24);
-        $url = url('/accept-invitation');
+        $url = url('/accept-invitation/' . $this->token);
 
         return (new MailMessage)
             ->subject('[みててね]　ゲスト招待')

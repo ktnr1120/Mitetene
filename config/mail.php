@@ -78,11 +78,6 @@ return [
                 'log',
             ],
         ],
-        
-        // メールテスト用mailFake
-        'fake' => [
-            'transport' => 'fake',
-        ]
     ],
 
     /*
