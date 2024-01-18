@@ -60,7 +60,7 @@ class InvitationController extends Controller
         }
     
         // トークンが有効な場合、ゲストユーザー登録のフォームを表示
-        return view('invitation.accept', ['token' => $token]);
+        return view('invitation.accept', ['token' => $token, 'email' => $invite->email]);
     }
 
     
@@ -74,10 +74,10 @@ class InvitationController extends Controller
         }
     
         // 既に登録されているユーザーならばログイン
-        $user = User::where('email', $invite->email)->first();
+        $existingUser = User::where('email', $invite->email)->first();
     
-        if ($user) {
-            Auth::login($user);
+        if ($existingUser) {
+            Auth::login($existingUser);
             return redirect('/dashboard'); // ログイン後のリダイレクト先を適切に設定
         }
     
