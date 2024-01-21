@@ -204,6 +204,17 @@ class PostController extends Controller
         
         return redirect('/posts/' . $post->id);
     }
+    
+    public function myPosts()
+    {
+        //ログインしているユーザーのみの投稿一覧を取得
+        $user = Auth::user();
+        //ログインしているユーザーが投稿した記事を取得
+        $posts = $user->posts()->orderBy('created_at', 'desc')->paginate(5);
+        $categories = Category::all();
+        
+        return view('posts.my-posts', compact('posts', 'categories'));
+    }
 
     public function delete(Post $post)
     {

@@ -18,8 +18,14 @@
                     <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
                         {{ __('投稿一覧') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('my-posts')" :active="request()->routeIs('my-posts')">
+                        {{ __('自分の投稿') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('familystructure')" :active="request()->routeIs('familystructure')">
                         {{ __('家族') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('authenticated')" :active="request()->routeIs('authenticated')">
+                        {{ __('他のユーザー') }}
                     </x-nav-link>
                     <x-nav-link :href="route('form')" :active="request()->routeIs('form')">
                         {{ __('招待') }}

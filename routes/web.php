@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// ログインしているユーザーのみの投稿一覧
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-posts', [PostController::class, 'myPosts'])->name('my-posts');
+    // 認証しているユーザー一覧
+    Route::get('/authenticated', [UserController::class, 'authenticated'])->name('authenticated');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [PostController::class, 'index'])->name('index');
