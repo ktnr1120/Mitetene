@@ -35,11 +35,15 @@ class InvitationController extends Controller
         // メール送信処理
         $email = $request->input('email');
         
+        //トークンの有効期限
+        $expiration = Carbon::now()->addHours(24);
+        
         //　メール送信時の保存処理
         Invite::create([
             'user_id' => auth()->id(),
             'email' => $email,
             'token' => $token,
+            'expiration' => $expiration,
         ]);
 
         Notification::route('mail', $email)
@@ -64,11 +68,16 @@ class InvitationController extends Controller
     }
 
     
-    public function acceptInvitation($token)
+    public function acceptInvitation($token, Request $request)
     {
+        //招待したﾕｰｻﾞｰIDと自分のIDの紐づけ
+        
+        //
+        
         $invite = Invite::where('token', $token)->first();
-    
-        if (!$invite || now() > $invite->expiration) {
+        
+        //dd($invite->token);
+        if(!$invite || Carbon::now() > $invite->expiration) {
             // トークンが無効な場合または有効期限切れの場合の処理
             abort(404);
         }
@@ -82,10 +91,13 @@ class InvitationController extends Controller
         }
     
         // ゲストユーザーとして登録
+        
+        //dd($request);
+        
         $guestUser = User::create([
-            'name' => $invite->name,
-            'email' => $invite->email,
-            'password' => Hash::make($invite->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
     
         // ログイン
