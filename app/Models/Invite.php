@@ -25,4 +25,11 @@ class Invite extends Model
         return $this->belongsTo(User::class);
     }
     
+    public function invitedUser($token)
+    {
+        return $this->belongsToMany(User::class, 'invites', 'invited_user_id', 'user_id')
+            ->withPivot('token')
+            ->wherePivot('token', $token)
+            ->withTimestamps();
+    }
 }
