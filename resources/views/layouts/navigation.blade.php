@@ -24,8 +24,8 @@
                     <x-nav-link :href="route('familystructure')" :active="request()->routeIs('familystructure')">
                         {{ __('家族') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('authenticated')" :active="request()->routeIs('authenticated')">
-                        {{ __('他のユーザー') }}
+                    <x-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
+                        {{ __('お友達') }}
                     </x-nav-link>
                     <x-nav-link :href="route('form')" :active="request()->routeIs('form')">
                         {{ __('招待') }}
