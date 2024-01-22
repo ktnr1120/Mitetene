@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
 
 // 認証しているユーザー一覧
 Route::middleware(['auth'])->group(function () {
-    Route::get('/friends', [FriendController::class, 'index'])->name('friends');
+    Route::get('/friends', [UserController::class, 'friends'])->name('friends');
 });
 
 Route::middleware(['auth'])->group(function () {
