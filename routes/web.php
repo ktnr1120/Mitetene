@@ -27,8 +27,11 @@ Route::get('/dashboard', function () {
 // ログインしているユーザーのみの投稿一覧
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-posts', [PostController::class, 'myPosts'])->name('my-posts');
-    // 認証しているユーザー一覧
-    Route::get('/authenticated', [UserController::class, 'authenticated'])->name('authenticated');
+});
+
+// 認証しているユーザー一覧
+Route::middleware(['auth'])->group(function () {
+    Route::get('/friends', [FriendController::class, 'index'])->name('friends');
 });
 
 Route::middleware(['auth'])->group(function () {

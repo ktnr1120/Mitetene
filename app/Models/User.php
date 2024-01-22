@@ -60,4 +60,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invite::class);
     }
+    
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'user_id','friend_id')
+            ->withTimestamps();
+    }
+    
+    public function isFriendWith(User $user)
+    {
+        return $this->friends()->where('friend_id', $user->id)->exists();
+    }
 }
