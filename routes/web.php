@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
 
 // 認証しているユーザー一覧
 Route::middleware(['auth'])->group(function () {
-    Route::get('/friends', [FriendController::class, 'index'])->name('friends');
+    Route::get('/friends', [UserController::class, 'friends'])->name('friends');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -61,7 +61,10 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/invite', [InvitationController::class, 'sendInvitation']);
 });
 
-// ゲストユーザー
+//友達
+Route::post('/accept-friendship/{friend}', 'FriendshipController@acceptFriendship')->name('acceptFriendship');
+
+// ゲストユーザー登録
 Route::get('/accept-invitation/{token}', [InvitationController::class, 'showAcceptForm'])
     ->name('guest.register.form');
 Route::post('/accept-invitation/{token}', [InvitationController::class, 'acceptInvitation'])
