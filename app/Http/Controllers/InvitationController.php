@@ -76,8 +76,10 @@ class InvitationController extends Controller
         //
         
         $invite = Invite::where('token', $token)->first();
+        //dd($invite);
         
         //dd($invite->token);
+        //dd($invite, Carbon::now(), $invite->expiration);
         if(!$invite || Carbon::now() > $invite->expiration) {
             // トークンが無効な場合または有効期限切れの場合の処理
             abort(404);
@@ -88,25 +90,29 @@ class InvitationController extends Controller
     
         if ($existingUser) {
             Auth::login($existingUser);
-            return redirect('/dashboard'); // ログイン後のリダイレクト先を適切に設定
+            return redirect('/index'); // ログイン後のリダイレクト先を適切に設定
         }
     
         // ゲストユーザーとして登録
-        
-        //dd($request);
-        
         $guestUser = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-    
+        
         // ログイン
-        Auth::login($guestUser);
-    
+        if (Auth::login($guestUser)) {
+            // ログインが成功した場合
+            \Log::info('Guest user logged in successfully.', ['user_id' => $guestUser->id]);
+        } else {
+            // ログインが失敗した場合
+            \Log::error('Guest user login failed.', ['user_email' => $request->email]);
+            abort(404);
+        }
+        
         // トークンを無効化
         $invite->delete();
-    
-        return redirect('/dashboard'); // ログイン後のリダイレクト先を適切に設定
+        
+        return redirect('/index');
     }
 }

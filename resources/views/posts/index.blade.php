@@ -41,11 +41,11 @@
                             @endforeach
                         @endif
                     </ul>
-                    <form action="/posts/{{ $post->id }}" id="form_{{$post->id}}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <p style="color: red;"><button type="button" onclick="deletePost({{ $post->id }})">削除</button></p>
-                    </form>
+                    <!--<form action="/posts/{{ $post->id }}" id="form_{{$post->id}}" method="post">-->
+                    <!--    @csrf-->
+                    <!--    @method('DELETE')-->
+                    <!--    <p style="color: red;"><button type="button" onclick="deletePost({{ $post->id }})">削除</button></p>-->
+                    <!--</form>-->
                 </div>
             @endforeach
         </div>

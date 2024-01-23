@@ -28,10 +28,10 @@ class PostController extends Controller
     public function show(Post $post)
     {
         //　ログインユーザーが投稿者と一致するか確認
-         if (auth()->user()->id !== $post->user->id) {
-             //　一致しない場合はアクセス拒否またはリダイレクトなどの処理を行う
-             abort(403, 'この投稿は閲覧できません。');
-         }
+        //  if (auth()->user()->id !== $post->user->id) {
+        //      //　一致しない場合はアクセス拒否またはリダイレクトなどの処理を行う
+        //      abort(403, 'この投稿は閲覧できません。');
+        //  }
         
         $userChildren = auth()->user()->children;
         
