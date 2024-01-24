@@ -8,8 +8,6 @@
 </head>
 <x-app-layout>
     <body>
-        <p>ログインユーザー：{{ Auth::user()->name }}</p>
-        <h1>みててね</h1>
         <a href='/posts/create'>投稿</a>
         <!--
         <div class='categories'>
@@ -33,14 +31,14 @@
                         @if ($post->image)
                             <img src="{{ Storage::disk('s3')->url($post->image->url) }}" alt="Post Image" width="200" heigth="100">
                         @endif
-                    <h3>カテゴリ:</h3>
-                    <ul>
-                        @if ($post->categories)
-                            @foreach ($post->categories as $category)
-                                <li>{{ $category->name }}</li>
-                            @endforeach
-                        @endif
-                    </ul>
+                    <!--<h3>カテゴリ:</h3>-->
+                    <!--<ul>-->
+                    <!--    @if ($post->categories)-->
+                    <!--        @foreach ($post->categories as $category)-->
+                    <!--            <li>{{ $category->name }}</li>-->
+                    <!--        @endforeach-->
+                    <!--    @endif-->
+                    <!--</ul>-->
                     <!--<form action="/posts/{{ $post->id }}" id="form_{{$post->id}}" method="post">-->
                     <!--    @csrf-->
                     <!--    @method('DELETE')-->
