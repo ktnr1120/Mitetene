@@ -2,11 +2,12 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>みててね</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 </head>
-<x-app-layout>
+<!--<x-app-layout>-->
     <body>
         <a href='/posts/create'>投稿</a>
         <!--
@@ -51,8 +52,10 @@
         <div class='paginate'>
             {{ $posts->links() }}
         </div>
+        
+        <div id="react-app"></div>
     
-        <script>
+        <script src="{{ mix('js/app.js') }}">
             function deletePost(id) {
                 'use strict'
                 
@@ -62,5 +65,5 @@
             }
         </script>
     </body>
-</x-app-layout>
+<!--</x-app-layout>-->
 </html>
