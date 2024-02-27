@@ -6,10 +6,13 @@
     <title>みててね</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    <link rel="stylesheet" href="https://npm.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 <!--<x-app-layout>-->
-    <body>
-        <a href='/posts/create'>投稿</a>
+    <body class="bg-gray-100">
+        <div class="container mx-auto my-8">
+            <h1 class="text-3xl font-bold mb-6">投稿一覧</h1>]
+            <a href='/posts/create' class="bg-blue-500 text-white py-2 px-4 rounded-md inline-block mb-4">新規投稿</a>
         <!--
         <div class='categories'>
             <h2>カテゴリ一覧</h2>
