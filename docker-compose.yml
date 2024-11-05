@@ -1,35 +1,72 @@
+version: '3.8'
+
 services:
-    laravel.test:
-        build:
-            context: ./vendor/laravel/sail/runtimes/8.3
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.3/app
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-            IGNITION_LOCAL_SITES_PATH: '${PWD}'
-        volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
-        depends_on:
-            - mailpit
-    mailpit:
-        image: 'axllent/mailpit:latest'
-        ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
-        networks:
-            - sail
+  # Laravelアプリケーションのコンテナ
+  app:
+    image: php:8.2-fpm
+    container_name: laravel_app
+    working_dir: /var/www/html
+    volumes:
+      - './:/var/www/html'  # src ではなくプロジェクトルートをマウント
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - laravel_network
+    depends_on:
+      - db
+    environment:
+      - PHP_EXTENSIONS=pdo_mysql
+    ports:
+      - 80:80
+
+  composer:
+    image: composer:latest
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    command: ["composer", "install"]
+
+  # Nginxサーバーのコンテナ
+  web:
+    image: nginx:latest
+    container_name: nginx_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Mitetene:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - laravel_network
+    depends_on:
+      - app
+
+  # MariaDBのコンテナ
+  db:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_password
+    ports:
+      - 3306:3306
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel_network
+  
+  #node:
+    #image: node:18  # Node.jsのイメージを指定
+    #volumes:
+      #- './:/var/www/html'  # Laravelプロジェクトのボリュームをマウント
+    #working_dir: /var/www/html
+
+# ボリュームの定義
+volumes:
+  db_data:
+
+# ネットワークの定義
 networks:
-    sail:
-        driver: bridge
+  laravel_network:
+    driver: bridge
